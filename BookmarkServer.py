@@ -42,7 +42,11 @@ import os
 import http.server
 import requests
 from urllib.parse import unquote, parse_qs
+import threading
+from socketserver import ThreadingMixIn
 
+class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    "This is an HTTPServer that supports thread-based concurrency."
 
 memory = {}
 
@@ -144,6 +148,6 @@ if __name__ == '__main__':
     # if it's not on Heroku (or other server), then it won't find a port - so give it 8000, which is the local port. So this will
     # check to see if it runs on server - if not, default to local.
     server_address = ('', port)
-    httpd = http.server.HTTPServer(server_address, Shortener)
+    httpd = ThreadHTTPServer(server_address, Shortener)
     print ('HTTPServer listening on port: ' +str(port))
     httpd.serve_forever()

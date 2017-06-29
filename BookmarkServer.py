@@ -38,6 +38,7 @@
 #
 # After writing each step, restart the server and run test.py to test it.
 
+import os
 import http.server
 import requests
 from urllib.parse import unquote, parse_qs
@@ -139,6 +140,10 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             self.wfile.write("We could not find that URI {} - did you check it works first?".format(longuri).encode())
 
 if __name__ == '__main__':
-    server_address = ('', 8000)
+    port = int(os.environ.get('PORT', 8000)) # So the program checks os.environ.get('PORT') - if on Heroku, will be given a port
+    # if it's not on Heroku (or other server), then it won't find a port - so give it 8000, which is the local port. So this will
+    # check to see if it runs on server - if not, default to local.
+    server_address = ('', port)
     httpd = http.server.HTTPServer(server_address, Shortener)
+    print ('HTTPServer listening on port: ' +str(port))
     httpd.serve_forever()

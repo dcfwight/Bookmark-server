@@ -29,7 +29,7 @@ required when sending over HTML.
 `python BookmarkServer.py`
 * The command line should then tell you that the HTTPServer is listening on port:8000
 * Swap to a browser and enter:
-`locahhost:8000/`
+`localhost:8000/`
 
 ### Usage
 * This is a very basic server!

@@ -3,7 +3,7 @@
 
 ### Aim
 * Create a simple server to serve up a basic HTML form
-* Uses localhost.
+* Uses either localhost, OR can be deployed on Heroku.
 * Responds to GET and POST requests.
 * Stores the information from POST in very simple local memory
 * Serves up that information
@@ -17,6 +17,7 @@
   * Use of .encode().
     * This is an in-built method of str, used to convert string format to binary
 required when sending over HTML.
+  * Use of environment variable in configuring for Heroku
 
 ### Setup
 * This project used Python3
@@ -24,7 +25,7 @@ required when sending over HTML.
 * Install packages using   
 `pip3 install -r requirements.txt`
 
-### Running
+### Running on localhost
 * At commandline enter the following:
 `python BookmarkServer.py`
 * The command line should then tell you that the HTTPServer is listening on port:8000
@@ -41,11 +42,29 @@ to the correct longURL (as long as that short-name is in the memory)
 * The memory is not permanent - it will wipe each time you stop the server.
 
 ### History
-* Code originally developed on Udacithy Full Stack Web Developer Nanodegree.
+* Code originally developed on Udacity Full Stack Web Developer Nanodegree.
 
 ### Heroko
-* There are files included that are related to Heroko - need to check that these still work
-  * Procfile
-  * Runtime.txt
+* There are two files included that are related to Heroko
+  * Procfile - this contains the line  
+`web: python BookmarkServer.py`  
+which Heroku needs to use to launch the program
+  * Runtime.txt - this contains the version of Python (supported by Heroku) which is 
+required to run the program
+  * In addition, Heroku also uses the requirements.txt to load the correct packages.
+* To use Heroku
+  * Create a Heroku account
+  * Download the Heroku CLI
+  * Log into Heroku with:
+`heroku login`
+  * Create your app on Heroku with:
+`heroku create your-app-name`
+  * Push your app up to Heroku with:
+`git push heroku master`
+* Hopefully all will work.
+
+### Current running Heroku server
+Visit [https://bookmark-server-fav.herokuapp.com/](https://bookmark-server-fav.herokuapp.com/)
+to see this running on my Heroku app.
 
 

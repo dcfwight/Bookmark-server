@@ -21,7 +21,7 @@ required when sending over HTML.
 ### Setup
 * This project used Python3
 * Packages required are noted in requirements.txt
-* Install using   
+* Install packages using   
 `pip3 install -r requirements.txt`
 
 ### Running

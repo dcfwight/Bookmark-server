@@ -34,6 +34,13 @@ memory = {}
 # Create very basic HTML form to be served to client
 form = '''<!DOCTYPE html>
 <title>Bookmark Server</title>
+<h1>Basic Server using Python http.server</h1>
+<p>Created by Doug Wight</p>
+<h2>Instructions</h2>
+<p>You type in the Long URL of a site you want to store</p>
+<p>And also the short name for it</p>
+<p>Then if you want to go quickly to that URL, just append /short-name</p>
+
 <form method="POST">
 	<label>Long URI:
 		<input name="longuri">

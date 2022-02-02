@@ -22,16 +22,16 @@ import os
 import http.server
 import requests
 from urllib.parse import unquote, parse_qs
-import threading
 from socketserver import ThreadingMixIn
 
 
 class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
 	"""This is an HTTPServer that supports thread-based concurrency."""
 
-
+# Create very basic memory dictionary - will not last between sessions.
 memory = {}
 
+# Create very basic HTML form to be served to client
 form = '''<!DOCTYPE html>
 <title>Bookmark Server</title>
 <form method="POST">
@@ -72,13 +72,13 @@ def checkURI(uri, timeout=5):
 
 class Shortener(http.server.BaseHTTPRequestHandler):
 	def do_GET(self):
-		# A GET request will either be for / (the root path) or for /some-name.
+		# A GET request will either be for / (the root path) or for /some-short name.
 
 		name = unquote(self.path[1:])
 
 		if name:
 			if name in memory:
-				# 2. Send a 303 redirect to the long URI in memory[name].
+				# Send a 303 redirect to the long URI in memory[name].
 				self.send_response(303)
 				self.send_header('Location', memory[name])  # this is where to redirect the browser to.
 				self.end_headers()
@@ -88,7 +88,8 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 				self.send_response(404)
 				self.send_header('Content-type', 'text/plain; charset=utf-8')
 				self.end_headers()
-				self.wfile.write("I don't know '{}'.".format(name).encode())
+				self.wfile.write("I don't know '{}'./nPerhaps you forgot to include"
+								 "the 'https://' at the start?".format(name).encode())
 		else:
 			# Root path. Send the form.
 			self.send_response(200)
@@ -104,6 +105,16 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 		length = int(self.headers.get('Content-length', 0))
 		body = self.rfile.read(length).decode()
 		params = parse_qs(body)
+
+		# check to see if both the longuri and shorturi have been filled in
+		if not ('longuri' in params.keys() and 'shortname' in params.keys()):
+			# Form did not have both fields filled in
+			# Send a 404 error with a useful message.
+			self.send_response(404)
+			self.send_header('Content-type', 'text/plain; charset=utf-8')
+			self.end_headers()
+			self.wfile.write("Please fill in both parts of the form".encode())
+
 		longuri = params["longuri"][0]
 		shortname = params["shortname"][0]
 
